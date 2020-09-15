@@ -323,12 +323,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Main Texture
-    second: {fileID: 2100000, guid: 593b1aec1e836af4c962f545fc4b0847, type: 2}
+    second: {fileID: 2100000, guid: b659f44827c96b04e9a5820863e66753, type: 2}
   materials:
     materialImportMode: 1
     materialName: 2
-    materialSearch: 0
-    materialLocation: 0
+    materialSearch: 2
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
