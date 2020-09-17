@@ -27,19 +27,17 @@ public class PlayerController : MonoBehaviour
         // creates new vector3 to store the movement direction
         // then calls SimpleMove() and passes in the moveDirection multiplied by moveSpeed
         // SimpleMove() is a method that autimatically moves the character in the given direction, not allwoing the character to move through obstacles
-        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"),
-            0, Input.GetAxis("Vertical"));
+        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         characterController.SimpleMove(moveDirection * moveSpeed);
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         // calculate the movement direction
-        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"),
-            0, Input.GetAxis("Vertical"));
+        Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
         // if value equals vector3.zero, marine is standing still
-        if(moveDirection == Vector3.zero)
+        if (moveDirection == Vector3.zero)
         {
             // TODO
         }
@@ -55,7 +53,6 @@ public class PlayerController : MonoBehaviour
         RaycastHit hit;
         // cast the ray from the main camera to the mouse position
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
         Debug.DrawRay(ray.origin, ray.direction * 1000, Color.green);
 
         // Physics.Raycast actually casts a ray
@@ -64,27 +61,23 @@ public class PlayerController : MonoBehaviour
         // 1000 indicates the length of the ray
         // layerMask lets the cast know what you are trying to hit
         // QueryTriggerInteraction.Ignore tells the physics engine not to activate triggers
-        if (Physics.Raycast(ray, out hit, 1000, layerMask,
-            QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(ray, out hit, 1000, layerMask, QueryTriggerInteraction.Ignore))
         {
             // comprises coordinates of the raycast hit
             if (hit.point != currentLookTarget)
             {
                 currentLookTarget = hit.point;
-
-                // 1 - Get target position
-                Vector3 targetPosition = new Vector3(hit.point.x,
-                    transform.position.y, hit.point.z);
-
-                // 2 - calculate the current quaternion, used to determine rotation
-                //LookRotation() returns the quaternion for where the marine should turn
-                Quaternion rotation = Quaternion.LookRotation(targetPosition -
-                    transform.position);
-
-                // 3 - Actual turn by using Lerp(). LErp is used to change a value smoothly over time
-                transform.rotation = Quaternion.Lerp(transform.rotation,
-                    rotation, Time.deltaTime * 10.0f);
             }
         }
+
+        // 1 - Get target position
+        Vector3 targetPosition = new Vector3(hit.point.x, transform.position.y, hit.point.z);
+
+        // 2 - calculate the current quaternion, used to determine rotation
+        //LookRotation() returns the quaternion for where the marine should turn
+        Quaternion rotation = Quaternion.LookRotation(targetPosition - transform.position);
+
+        // 3 - Actual turn by using Lerp(). Lerp is used to change a value smoothly over time
+        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, Time.deltaTime * 10.0f);
     }
 }

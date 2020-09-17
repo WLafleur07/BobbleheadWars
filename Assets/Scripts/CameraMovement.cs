@@ -21,8 +21,7 @@ public class CameraMovement : MonoBehaviour
         if (followTarget != null)
         {
             // Vector3 lerp is called to calculate the required position
-            transform.position = Vector3.Lerp(transform.position,
-                followTarget.transform.position, Time.deltaTime * moveSpeed);
+            transform.position = Vector3.Lerp(transform.position, followTarget.transform.position, Time.deltaTime * moveSpeed);
         }
     }
 }
