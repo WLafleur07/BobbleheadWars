@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     // currentLook is where you want the Marine to stare
     private Vector3 currentLookTarget = Vector3.zero;
 
+    public Animator bodyAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,7 +41,7 @@ public class PlayerController : MonoBehaviour
         // if value equals vector3.zero, marine is standing still
         if (moveDirection == Vector3.zero)
         {
-            // TODO
+            bodyAnimator.SetBool("IsMoving", false);
         }
         else
         {
@@ -47,6 +49,8 @@ public class PlayerController : MonoBehaviour
             // provide direction, then mutliply it by the force amount
             // force.acceleration gives a continuous amount of force that ignores the mass
             head.AddForce(transform.right * 150, ForceMode.Acceleration);
+
+            bodyAnimator.SetBool("IsMoving", true);
         }
 
         // creates empty RaycstHit.
