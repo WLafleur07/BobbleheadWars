@@ -63,7 +63,7 @@ public class Gun : MonoBehaviour
     {
         // gets reference to attached AudioSource
         audioSource = GetComponent<AudioSource>();
-      
+        audioSource.PlayOneShot(SoundManager.Instance.gunFire);
     }
 
     // Update is called once per frame

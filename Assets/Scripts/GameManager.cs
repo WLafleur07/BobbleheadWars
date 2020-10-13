@@ -36,6 +36,10 @@ public class GameManager : MonoBehaviour
     private float actualUpgradeTime = 0;
     private float currentUpgradeTime = 0;
 
+    public GameObject deathFloor;
+
+    public Animator arenaAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,8 +52,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            return;
+        }
+
         // adds the amount of time from the past frame
         currentUpgradeTime += Time.deltaTime;
+        // accumulates amount of time that's passed between each frame
+        currentSpawnTime += Time.deltaTime;
 
         if (currentUpgradeTime > actualUpgradeTime)
         {
@@ -73,9 +84,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // accumulates amount of time that's passed between each frame
-        currentSpawnTime += Time.deltaTime;
-
         // spawn randomizer
         if(currentSpawnTime > generatedSpawnTime)
         {
@@ -95,8 +103,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 // if aliensPerSpawn exceeds maximum, then the amount of spawns will reduce
-                aliensPerSpawn = (aliensPerSpawn > totalAliens) ?
-                    aliensPerSpawn - totalAliens : aliensPerSpawn;
+                aliensPerSpawn = (aliensPerSpawn > totalAliens) ? aliensPerSpawn - totalAliens : aliensPerSpawn;
 
                 for (int i = 0; i < aliensPerSpawn; i++)
                 {
@@ -143,9 +150,32 @@ public class GameManager : MonoBehaviour
                         // rotates the alien towards the hero using the alien's Y-axis position
                         Vector3 targetRotation = new Vector3(player.transform.position.x, newAlien.transform.position.y, player.transform.position.z);
                         newAlien.transform.LookAt(targetRotation);
+                        // whenever this event occurs, the GameManager gets a notification
+                        alienScript.OnDestroy.AddListener(AlienDestroyed);
+                        alienScript.GetDeathParticles().SetDeathFloor(deathFloor);
                     }
                 }
             }
         }
+    }
+
+    // decreases the number of aliens on screen
+    public void AlienDestroyed()
+    {
+        aliensOnScreen -= 1;
+        totalAliens -= 1;
+
+        // once total aliens reaches 0, endGame method is called
+        if (totalAliens == 0)
+        {
+            Invoke("endGame", 2.0f);
+        }
+    }
+
+    private void endGame()
+    {
+        SoundManager.Instance.PlayOneShot(SoundManager.Instance.elevatorArrived);
+        // fires the player won arena animator
+        arenaAnimator.SetTrigger("PlayerWon");
     }
 }
